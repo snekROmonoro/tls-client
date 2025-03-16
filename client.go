@@ -32,6 +32,8 @@ type HttpClient interface {
 	GetFollowRedirect() bool
 	SetForceHttp1(force bool)
 	GetForceHttp1() bool
+	SetTimeout(timeout time.Duration)
+	GetTimeout() time.Duration
 	CloseIdleConnections()
 	Do(req *http.Request) (*http.Response, error)
 	Get(url string) (resp *http.Response, err error)
@@ -222,6 +224,17 @@ func (c *httpClient) SetForceHttp1(forceHttp1 bool) {
 // GetForceHttp1 returns whether the client is configured to ONLY use HTTP1.
 func (c *httpClient) GetForceHttp1() bool {
 	return c.config.forceHttp1
+}
+
+// SetTimeout configures the client's timeout
+func (c *httpClient) SetTimeout(timeout time.Duration) {
+	c.logger.Debug("set timeout from %s to %s", c.config.timeout, timeout)
+	c.config.timeout = timeout
+}
+
+// GetTimeout returns the client's timeout
+func (c *httpClient) GetTimeout() time.Duration {
+	return c.config.timeout
 }
 
 // SetProxy configures the client to use the given proxy URL.
