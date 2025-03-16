@@ -230,6 +230,7 @@ func (c *httpClient) GetForceHttp1() bool {
 func (c *httpClient) SetTimeout(timeout time.Duration) {
 	c.logger.Debug("set timeout from %s to %s", c.config.timeout, timeout)
 	c.config.timeout = timeout
+	c.Client.Timeout = timeout
 }
 
 // GetTimeout returns the client's timeout
