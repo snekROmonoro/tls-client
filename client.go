@@ -30,6 +30,8 @@ type HttpClient interface {
 	GetProxy() string
 	SetFollowRedirect(followRedirect bool)
 	GetFollowRedirect() bool
+	SetForceHttp1(force bool)
+	GetForceHttp1() bool
 	CloseIdleConnections()
 	Do(req *http.Request) (*http.Response, error)
 	Get(url string) (resp *http.Response, err error)
@@ -209,6 +211,17 @@ func (c *httpClient) applyFollowRedirect() {
 	if c.config.customRedirectFunc != nil && c.config.followRedirects {
 		c.CheckRedirect = c.config.customRedirectFunc
 	}
+}
+
+// SetForceHttp1 configures the client to ONLY use HTTP1.
+func (c *httpClient) SetForceHttp1(forceHttp1 bool) {
+	c.logger.Debug("set force http1 from %v to %v", c.config.forceHttp1, forceHttp1)
+	c.config.forceHttp1 = forceHttp1
+}
+
+// GetForceHttp1 returns whether the client is configured to ONLY use HTTP1.
+func (c *httpClient) GetForceHttp1() bool {
+	return c.config.forceHttp1
 }
 
 // SetProxy configures the client to use the given proxy URL.
